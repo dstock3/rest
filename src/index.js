@@ -1,8 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
 
 import express from 'express';
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 let users = {
     1: {
@@ -42,6 +46,18 @@ app.get('/messages', (req, res) => {
 
 app.get('/messages/:messageId', (req, res) => {
     return res.send(messages[req.params.messageId]);
+});
+
+app.post('/messages', (req, res) => {
+    const id = uuidv4();
+    const message = {
+      id,
+      text: req.body.text,
+    };
+  
+    messages[id] = message;
+  
+    return res.send(message);
 });
   
   
