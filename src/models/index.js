@@ -1,3 +1,5 @@
+// The models folder in an Express application is usually the place where you define your data sources. In our case, it's the sample data, but in other applications, for instance, it would be the interfaces to the database
+
 let users = {
     1: {
         id: '1',
