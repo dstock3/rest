@@ -32,6 +32,15 @@ let messages = {
     },
 };
 
+app.use((req, res, next) => {
+    req.me = users[1];
+    next();
+});
+
+app.get('/session', (req, res) => {
+    return res.send(users[req.me.id]);
+});
+  
 app.get('/users', (req, res) => {
     return res.send(Object.values(users));
 });
@@ -53,16 +62,26 @@ app.post('/messages', (req, res) => {
     const message = {
       id,
       text: req.body.text,
+      userId: req.me.id,
     };
   
     messages[id] = message;
   
     return res.send(message);
 });
-  
-  
-  
 
+app.delete('/messages/:messageId', (req, res) => {
+    const {
+      [req.params.messageId]: message,
+      ...otherMessages
+    } = messages;
+  
+    messages = otherMessages;
+  
+    return res.send(message);
+});
+  
+  
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
 );
